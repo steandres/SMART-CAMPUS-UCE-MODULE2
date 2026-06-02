@@ -1,3 +1,4 @@
+// Validates Bearer JWT tokens using Passport JWT strategy configuration.
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';

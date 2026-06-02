@@ -1,3 +1,4 @@
+// Protects routes with JWT validation when AUTH_ENABLED=true and bypasses auth when disabled.
 import { ExecutionContext, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { AuthGuard } from '@nestjs/passport';

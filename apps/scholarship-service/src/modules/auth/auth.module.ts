@@ -1,3 +1,4 @@
+// Configures JWT authentication infrastructure without implementing login or user management.
 import { Global, MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';

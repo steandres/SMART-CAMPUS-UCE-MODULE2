@@ -1,0 +1,35 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: scholarship-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: scholarship_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - scholarship_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d scholarship_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  scholarship-service:
+    build:
+      context: .
+      dockerfile: apps/scholarship-service/Dockerfile
+    container_name: scholarship-service
+    restart: unless-stopped
+    env_file:
+      - apps/scholarship-service/.env.docker
+    ports:
+      - "3000:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  scholarship_postgres_data:

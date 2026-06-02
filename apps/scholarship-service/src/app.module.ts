@@ -3,6 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import envConfiguration from './config/env.configuration';
 import { validateEnv } from './config/env.validation';
+import { AuthModule } from './modules/auth/auth.module';
 import { HealthModule } from './modules/health/health.module';
 import { ScholarshipTypeOrmEntity } from './modules/scholarship/infrastructure/persistence/typeorm/entities/scholarship.typeorm-entity';
 import { ScholarshipModule } from './modules/scholarship/scholarship.module';
@@ -35,6 +36,7 @@ import { ScholarshipModule } from './modules/scholarship/scholarship.module';
         };
       },
     }),
+    AuthModule,
     ScholarshipModule,
     HealthModule,
   ],

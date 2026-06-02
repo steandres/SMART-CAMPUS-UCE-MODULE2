@@ -26,6 +26,11 @@ export function validateEnv(config: EnvConfig): EnvConfig {
     }
   }
 
+  // JWT configuration is required only when authentication is enabled.
+  if (config.AUTH_ENABLED === 'true' && !config.JWT_SECRET) {
+    throw new Error('Environment variable JWT_SECRET is required when AUTH_ENABLED=true');
+  }
+
   if (config.DB_PORT) {
     const dbPort = Number(config.DB_PORT);
 

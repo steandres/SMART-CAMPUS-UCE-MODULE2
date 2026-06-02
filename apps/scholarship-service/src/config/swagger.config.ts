@@ -8,6 +8,14 @@ export function setupSwagger(app: INestApplication): void {
       'Student Welfare and Support Module - Scholarship Management Microservice',
     )
     .setVersion('1.0.0')
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+      },
+      'JWT',
+    )
     .addTag('Scholarships')
     .addTag('Health')
     .build();

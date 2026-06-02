@@ -1,5 +1,6 @@
 import {
   ApiBadRequestResponse,
+  ApiBearerAuth,
   ApiBody,
   ApiCreatedResponse,
   ApiInternalServerErrorResponse,
@@ -21,7 +22,11 @@ import {
   ParseUUIDPipe,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
+import { CurrentUser } from '../../../auth/decorators/current-user.decorator';
+import { JwtAuthGuard } from '../../../auth/guards/jwt-auth.guard';
+import { JwtPayload } from '../../../auth/interfaces/jwt-payload.interface';
 import { ScholarshipService } from '../../application/services/scholarship.service';
 import { CreateScholarshipDto } from '../../application/dtos/create-scholarship.dto';
 import { UpdateScholarshipDto } from '../../application/dtos/update-scholarship.dto';
@@ -61,6 +66,8 @@ export class ScholarshipController {
 
   @Get()
   @HttpCode(HttpStatus.OK)
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth('JWT')
   @ApiOperation({ summary: 'List scholarship requests' })
   @ApiOkResponse({
     description: 'Scholarship list returned successfully',
@@ -79,7 +86,9 @@ export class ScholarshipController {
     },
   })
   @ApiInternalServerErrorResponse({ description: 'Internal server error' })
-  getScholarships(): Promise<Scholarship[]> {
+  getScholarships(
+    @CurrentUser() _currentUser?: JwtPayload,
+  ): Promise<Scholarship[]> {
     return this.scholarshipService.getScholarships();
   }
 

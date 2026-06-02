@@ -1,4 +1,30 @@
 {
   "collection": "@nestjs/schematics",
-  "sourceRoot": "apps/scholarship-service/src"
+  "sourceRoot": "apps/smart-campus-uce-module2/apps/scholarship-service/src",
+  "monorepo": true,
+  "root": "apps/smart-campus-uce-module2",
+  "compilerOptions": {
+    "webpack": true,
+    "tsConfigPath": "apps/smart-campus-uce-module2/tsconfig.app.json"
+  },
+  "projects": {
+    "smart-campus-uce-module2": {
+      "type": "application",
+      "root": "apps/smart-campus-uce-module2",
+      "entryFile": "main",
+      "sourceRoot": "apps/smart-campus-uce-module2/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/smart-campus-uce-module2/tsconfig.app.json"
+      }
+    },
+    "socioeconomic-form-service": {
+      "type": "application",
+      "root": "apps/socioeconomic-form-service",
+      "entryFile": "main",
+      "sourceRoot": "apps/socioeconomic-form-service/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/socioeconomic-form-service/tsconfig.app.json"
+      }
+    }
+  }
 }

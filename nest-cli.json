@@ -1,4 +1,30 @@
 {
   "collection": "@nestjs/schematics",
-  "sourceRoot": "apps/scholarship-service/src"
+  "sourceRoot": "apps/scholarship-service/src",
+  "monorepo": true,
+  "root": "apps/scholarship-service",
+  "compilerOptions": {
+    "webpack": true,
+    "tsConfigPath": "apps/scholarship-service/tsconfig.app.json"
+  },
+  "projects": {
+    "scholarship-service": {
+      "type": "application",
+      "root": "apps/scholarship-service",
+      "entryFile": "main",
+      "sourceRoot": "apps/scholarship-service/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/scholarship-service/tsconfig.app.json"
+      }
+    },
+    "socioeconomic-form-service": {
+      "type": "application",
+      "root": "apps/socioeconomic-form-service",
+      "entryFile": "main",
+      "sourceRoot": "apps/socioeconomic-form-service/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/socioeconomic-form-service/tsconfig.app.json"
+      }
+    }
+  }
 }

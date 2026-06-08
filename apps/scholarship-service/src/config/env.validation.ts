@@ -1,3 +1,4 @@
+// Validates required environment variables depending on runtime mode and enabled features.
 type EnvConfig = Record<string, string | undefined>;
 
 export function validateEnv(config: EnvConfig): EnvConfig {

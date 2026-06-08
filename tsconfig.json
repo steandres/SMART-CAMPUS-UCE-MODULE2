@@ -14,8 +14,16 @@
     "strict": true,
     "skipLibCheck": true,
     "moduleResolution": "node",
-    "types": ["node"]
+    "types": [
+      "node"
+    ],
+    "paths": {}
   },
-  "include": ["apps/**/*.ts"],
-  "exclude": ["node_modules", "dist"]
+  "include": [
+    "apps/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
 }

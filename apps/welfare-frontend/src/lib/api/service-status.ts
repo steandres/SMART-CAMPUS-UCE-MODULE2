@@ -19,12 +19,12 @@ export async function getServiceStatuses(): Promise<ServiceStatus[]> {
 
   return [
     {
-      name: 'Scholarship Service',
+      name: 'scholarship-service health',
       baseUrl: scholarshipUrl,
       isAvailable: scholarship.status === 'fulfilled',
     },
     {
-      name: 'Socioeconomic Form Service',
+      name: 'socioeconomic-form-service health',
       baseUrl: socioeconomicUrl,
       isAvailable: socioeconomic.status === 'fulfilled',
     },

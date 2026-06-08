@@ -5,10 +5,9 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 async function bootstrap() {
   const app = await NestFactory.create(SocioeconomicFormServiceModule);
 
-  // Configuración de la documentación de Swagger
   const config = new DocumentBuilder()
     .setTitle('Socioeconomic Form Service')
-    .setDescription('Módulo de Bienestar Estudiantil - Fichas Socioeconómicas UCE')
+    .setDescription('Student Welfare Module - UCE Socioeconomic Forms')
     .setVersion('1.0')
     .addTag('Socioeconomic Forms')
     .build();
@@ -16,10 +15,9 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api/docs', app, document);
 
-  // Puerto asignado a tu microservicio
   const port = process.env.PORT || 3002;
   await app.listen(port);
-  console.log(`Socioeconomic Form Service corriendo en: http://localhost:${port}`);
-  console.log(`Documentación de Swagger disponible en: http://localhost:${port}/api/docs`);
+  console.log(`Socioeconomic Form Service running at: http://localhost:${port}`);
+  console.log(`Swagger documentation available at: http://localhost:${port}/api/docs`);
 }
 bootstrap();

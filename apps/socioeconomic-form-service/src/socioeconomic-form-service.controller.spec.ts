@@ -4,19 +4,36 @@ import { SocioeconomicFormServiceService } from './socioeconomic-form-service.se
 
 describe('SocioeconomicFormServiceController', () => {
   let socioeconomicFormServiceController: SocioeconomicFormServiceController;
+  const serviceMock = {
+    create: jest.fn(),
+    findAll: jest.fn(),
+    findOne: jest.fn(),
+    findByStudent: jest.fn(),
+    update: jest.fn(),
+    remove: jest.fn(),
+  };
 
   beforeEach(async () => {
     const app: TestingModule = await Test.createTestingModule({
       controllers: [SocioeconomicFormServiceController],
-      providers: [SocioeconomicFormServiceService],
+      providers: [
+        {
+          provide: SocioeconomicFormServiceService,
+          useValue: serviceMock,
+        },
+      ],
     }).compile();
 
     socioeconomicFormServiceController = app.get<SocioeconomicFormServiceController>(SocioeconomicFormServiceController);
   });
 
-  describe('root', () => {
-    it('should return "Hello World!"', () => {
-      expect(socioeconomicFormServiceController.getHello()).toBe('Hello World!');
+  describe('findAll', () => {
+    it('should return socioeconomic forms', async () => {
+      const forms = [{ studentId: 'student-1' }];
+      serviceMock.findAll.mockResolvedValue(forms);
+
+      await expect(socioeconomicFormServiceController.findAll()).resolves.toEqual(forms);
+      expect(serviceMock.findAll).toHaveBeenCalledTimes(1);
     });
   });
 });

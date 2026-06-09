@@ -1,6 +1,7 @@
 'use client';
 
 import { FormEvent, useEffect, useState } from 'react';
+import { isAxiosError } from 'axios';
 import { Navigation } from '@/components/dashboard/navigation';
 import {
   Scholarship,
@@ -23,6 +24,28 @@ const statusStyles: Record<ScholarshipStatus, string> = {
   UNDER_REVIEW: 'bg-blue-100 text-blue-700',
   APPROVED: 'bg-emerald-100 text-emerald-700',
   REJECTED: 'bg-rose-100 text-rose-700',
+};
+
+const getApiErrorMessage = (error: unknown, fallback: string) => {
+  if (!isAxiosError(error)) {
+    return fallback;
+  }
+
+  const data = error.response?.data;
+
+  if (typeof data === 'object' && data !== null && 'message' in data) {
+    const message = (data as { message?: string | string[] }).message;
+
+    if (Array.isArray(message)) {
+      return message.join(' ');
+    }
+
+    if (message) {
+      return message;
+    }
+  }
+
+  return fallback;
 };
 
 export default function ScholarshipsPage() {
@@ -63,8 +86,13 @@ export default function ScholarshipsPage() {
       setForm(initialFormState);
       setMessage('Scholarship request created successfully.');
       await loadScholarships();
-    } catch {
-      setError('Unable to create scholarship. Check the form data and API status.');
+    } catch (error) {
+      setError(
+        getApiErrorMessage(
+          error,
+          'Unable to create scholarship. Check the form data and API status.',
+        ),
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -82,8 +110,10 @@ export default function ScholarshipsPage() {
       await updateScholarshipStatus(id, status);
       setMessage(`Scholarship ${status.toLowerCase()} successfully.`);
       await loadScholarships();
-    } catch {
-      setError(`Unable to update scholarship status to ${status}.`);
+    } catch (error) {
+      setError(
+        getApiErrorMessage(error, `Unable to update scholarship status to ${status}.`),
+      );
     } finally {
       setActionId(null);
     }
@@ -245,7 +275,11 @@ export default function ScholarshipsPage() {
                       </td>
                     </tr>
                   ) : (
-                    scholarships.map((scholarship) => (
+                    scholarships.map((scholarship) => {
+                      const canUpdateStatus =
+                        scholarship.status === 'PENDING' || scholarship.status === 'UNDER_REVIEW';
+
+                      return (
                       <tr key={scholarship.id} className="align-top">
                         <td className="px-5 py-4 font-semibold text-campus-navy">
                           <span className="block max-w-44 truncate">{scholarship.studentId}</span>
@@ -272,21 +306,21 @@ export default function ScholarshipsPage() {
                           <div className="flex flex-wrap gap-2">
                             <button
                               type="button"
-                              disabled={actionId === scholarship.id}
+                              disabled={!canUpdateStatus || actionId === scholarship.id}
                               onClick={() =>
                                 void handleStatusUpdate(scholarship.id, 'APPROVED')
                               }
-                              className="rounded-full bg-emerald-50 px-3 py-2 text-xs font-bold text-emerald-700 transition hover:bg-emerald-600 hover:text-white disabled:opacity-50"
+                              className="rounded-full bg-emerald-50 px-3 py-2 text-xs font-bold text-emerald-700 transition hover:bg-emerald-600 hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
                             >
                               Approve
                             </button>
                             <button
                               type="button"
-                              disabled={actionId === scholarship.id}
+                              disabled={!canUpdateStatus || actionId === scholarship.id}
                               onClick={() =>
                                 void handleStatusUpdate(scholarship.id, 'REJECTED')
                               }
-                              className="rounded-full bg-rose-50 px-3 py-2 text-xs font-bold text-rose-700 transition hover:bg-rose-600 hover:text-white disabled:opacity-50"
+                              className="rounded-full bg-rose-50 px-3 py-2 text-xs font-bold text-rose-700 transition hover:bg-rose-600 hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
                             >
                               Reject
                             </button>
@@ -301,7 +335,8 @@ export default function ScholarshipsPage() {
                           </div>
                         </td>
                       </tr>
-                    ))
+                      );
+                    })
                   )}
                 </tbody>
               </table>

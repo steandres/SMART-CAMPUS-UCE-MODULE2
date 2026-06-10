@@ -6,7 +6,7 @@ COPY package*.json ./
 RUN npm install
 
 COPY nest-cli.json tsconfig*.json ./
-COPY apps ./apps
+COPY apps/psychological-care-service ./apps/psychological-care-service
 
 RUN npx nest build psychological-care-service
 

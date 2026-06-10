@@ -16,3 +16,7 @@ export const scholarshipApi = createHttpClient(
 export const socioeconomicApi = createHttpClient(
   process.env.NEXT_PUBLIC_SOCIOECONOMIC_API_URL ?? 'http://localhost:3001',
 );
+
+export const psychologicalApi = createHttpClient(
+  process.env.NEXT_PUBLIC_PSYCHOLOGICAL_API_URL ?? 'http://localhost:3002',
+);

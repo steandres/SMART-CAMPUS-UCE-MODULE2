@@ -6,9 +6,9 @@ COPY package*.json ./
 RUN npm install
 
 COPY nest-cli.json tsconfig*.json ./
-COPY apps ./apps
+COPY apps/scholarship-service ./apps/scholarship-service
 
-RUN npm run build
+RUN npx nest build scholarship-service
 
 FROM node:22-alpine AS runner
 

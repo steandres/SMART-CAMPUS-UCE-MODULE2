@@ -98,6 +98,7 @@ services:
       args:
         NEXT_PUBLIC_SCHOLARSHIP_API_URL: http://localhost:3000
         NEXT_PUBLIC_SOCIOECONOMIC_API_URL: http://localhost:3001
+        NEXT_PUBLIC_PSYCHOLOGICAL_API_URL: http://localhost:3002
     container_name: welfare-frontend
     restart: unless-stopped
     env_file:
@@ -107,6 +108,7 @@ services:
     depends_on:
       - scholarship-service
       - socioeconomic-form-service
+      - psychological-care-service
 
 volumes:
   scholarship_postgres_data:

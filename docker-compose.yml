@@ -91,6 +91,70 @@ services:
       psychological-postgres:
         condition: service_healthy
 
+  subject-postgres:
+    image: postgres:16
+    container_name: subject-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: subject_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5435:5432"
+    volumes:
+      - subject_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d subject_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  subject-service:
+    build:
+      context: .
+      dockerfile: apps/subject-service/Dockerfile
+    container_name: subject-service
+    restart: unless-stopped
+    env_file:
+      - apps/subject-service/.env.docker
+    ports:
+      - "3004:3004"
+    depends_on:
+      subject-postgres:
+        condition: service_healthy
+
+  enrollment-postgres:
+    image: postgres:16
+    container_name: enrollment-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: enrollment_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5436:5432"
+    volumes:
+      - enrollment_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d enrollment_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  enrollment-service:
+    build:
+      context: .
+      dockerfile: apps/enrollment-service/Dockerfile
+    container_name: enrollment-service
+    restart: unless-stopped
+    env_file:
+      - apps/enrollment-service/.env.docker
+    ports:
+      - "3005:3005"
+    depends_on:
+      enrollment-postgres:
+        condition: service_healthy
+
   api-gateway:
     build:
       context: .
@@ -130,3 +194,5 @@ volumes:
   scholarship_postgres_data:
   socioeconomic_mongo_data:
   psychological_postgres_data:
+  subject_postgres_data:
+  enrollment_postgres_data:

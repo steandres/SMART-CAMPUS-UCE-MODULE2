@@ -155,6 +155,38 @@ services:
       enrollment-postgres:
         condition: service_healthy
 
+  student-postgres:
+    image: postgres:16
+    container_name: student-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: student_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5437:5432"
+    volumes:
+      - student_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d student_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  student-service:
+    build:
+      context: .
+      dockerfile: apps/student-service/Dockerfile
+    container_name: student-service
+    restart: unless-stopped
+    env_file:
+      - apps/student-service/.env.docker
+    ports:
+      - "3006:3006"
+    depends_on:
+      student-postgres:
+        condition: service_healthy
+
   api-gateway:
     build:
       context: .
@@ -169,6 +201,9 @@ services:
       - scholarship-service
       - socioeconomic-form-service
       - psychological-care-service
+      - subject-service
+      - enrollment-service
+      - student-service
 
   welfare-frontend:
     build:
@@ -178,6 +213,7 @@ services:
         NEXT_PUBLIC_SCHOLARSHIP_API_URL: http://localhost:3000
         NEXT_PUBLIC_SOCIOECONOMIC_API_URL: http://localhost:3001
         NEXT_PUBLIC_PSYCHOLOGICAL_API_URL: http://localhost:3002
+        NEXT_PUBLIC_API_GATEWAY_URL: http://localhost:8080
     container_name: welfare-frontend
     restart: unless-stopped
     env_file:
@@ -189,6 +225,7 @@ services:
       - scholarship-service
       - socioeconomic-form-service
       - psychological-care-service
+      - student-service
 
 volumes:
   scholarship_postgres_data:
@@ -196,3 +233,4 @@ volumes:
   psychological_postgres_data:
   subject_postgres_data:
   enrollment_postgres_data:
+  student_postgres_data:

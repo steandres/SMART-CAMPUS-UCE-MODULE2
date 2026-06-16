@@ -52,6 +52,15 @@
       "compilerOptions": {
         "tsConfigPath": "apps/subject-service/tsconfig.app.json"
       }
+    },
+    "enrollment-service": {
+      "type": "application",
+      "root": "apps/enrollment-service",
+      "entryFile": "main",
+      "sourceRoot": "apps/enrollment-service/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/enrollment-service/tsconfig.app.json"
+      }
     }
   }
 }

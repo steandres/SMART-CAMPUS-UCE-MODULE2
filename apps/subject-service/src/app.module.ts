@@ -4,6 +4,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import envConfiguration from './config/env.configuration';
 import { validateEnv } from './config/env.validation';
 import { HealthModule } from './modules/health/health.module';
+import { SubjectTypeOrmEntity } from './modules/subject/infrastructure/persistence/typeorm/entities/subject.typeorm-entity';
+import { SubjectModule } from './modules/subject/subject.module';
 
 @Module({
   imports: [
@@ -28,10 +30,12 @@ import { HealthModule } from './modules/health/health.module';
           synchronize: configService.get<boolean>('database.synchronize'),
           logging: configService.get<boolean>('database.logging'),
           autoLoadEntities: true,
+          entities: [SubjectTypeOrmEntity],
           manualInitialization: !dbEnabled,
         };
       },
     }),
+    SubjectModule,
     HealthModule,
   ],
 })
